@@ -106,3 +106,33 @@ moduleCard?.addEventListener('keydown', (event) => {
     cycleModule();
   }
 });
+
+const contactForm = document.querySelector('[data-contact-form]');
+const formStatus = contactForm?.querySelector('[data-form-status]');
+contactForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const submitButton = contactForm.querySelector('.form-submit');
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.querySelector('span').textContent = '…';
+  }
+  if (formStatus) formStatus.textContent = 'Sending…';
+
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: new FormData(contactForm),
+    });
+    if (!response.ok) throw new Error('Request failed');
+    contactForm.reset();
+    if (formStatus) formStatus.textContent = 'Thanks — your message is on its way.';
+  } catch {
+    if (formStatus) formStatus.textContent = 'Something went wrong. Please email vikaspat371@gmail.com.';
+  } finally {
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.querySelector('span').textContent = '↗';
+    }
+  }
+});
