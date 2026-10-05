@@ -70,3 +70,39 @@ anchorLinks.forEach((link) => {
     target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
   });
 });
+
+const moduleCard = document.querySelector('[data-module-card]');
+const moduleName = moduleCard?.querySelector('.module-name');
+const moduleValues = moduleCard ? [...moduleCard.querySelectorAll('.module-value')] : [];
+const moduleStatus = moduleCard?.querySelector('.module-status');
+const moduleHint = moduleCard?.querySelector('.module-hint');
+const moduleOptions = [
+  { name: 'ODOO / CRM', rows: ['crm.lead', 'res.partner', 'mail.activity'], status: '3 active models' },
+  { name: 'ODOO / SALES', rows: ['sale.order', 'sale.order.line', 'account.move'], status: '3 active models' },
+  { name: 'ODOO / INVENTORY', rows: ['stock.move', 'stock.picking', 'product.template'], status: '3 active models' },
+  { name: 'ODOO / API', rows: ['api.connector', 'sync.queue', 'res.config'], status: '3 active models' },
+];
+let activeModule = 0;
+
+const cycleModule = () => {
+  if (!moduleCard) return;
+  activeModule = (activeModule + 1) % moduleOptions.length;
+  const next = moduleOptions[activeModule];
+  moduleCard.classList.add('is-switching');
+  window.setTimeout(() => {
+    if (moduleName) moduleName.textContent = next.name;
+    moduleValues.forEach((value, index) => { value.textContent = next.rows[index]; });
+    if (moduleStatus) moduleStatus.textContent = next.status;
+    moduleCard.setAttribute('aria-label', `Active module: ${next.name}. Activate to cycle.`);
+    moduleCard.classList.remove('is-switching');
+    if (moduleHint) moduleHint.textContent = `ACTIVE / ${String(activeModule + 1).padStart(2, '0')} OF 04`;
+  }, 180);
+};
+
+moduleCard?.addEventListener('click', cycleModule);
+moduleCard?.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    cycleModule();
+  }
+});

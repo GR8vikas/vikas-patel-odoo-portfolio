@@ -53,16 +53,17 @@
 
         <div class="hero-art-wrap reveal reveal-delay" aria-label="Abstract 3D visualization of an Odoo module system" role="img">
           <div class="art-caption art-caption-top"><span>MODULE / 001</span><span>LIVE SYSTEM</span></div>
-          <div class="hero-art" data-tilt>
+          <div class="hero-art" data-tilt data-module-stage>
             <div class="orbit orbit-one"></div>
             <div class="orbit orbit-two"></div>
             <div class="orbit orbit-three"></div>
-            <div class="core-card">
-              <div class="core-top"><span class="status-pulse"></span><span>ODOO / CORE</span><span class="core-arrow">↗</span></div>
-              <div class="core-code"><span>01</span><span>crm.pipeline</span><b>+</b></div>
-              <div class="core-code faded"><span>02</span><span>sale.order</span><b>+</b></div>
-              <div class="core-code faded-more"><span>03</span><span>stock.move</span><b>+</b></div>
-              <div class="core-foot"><span>6 active modules</span><span class="mini-bars"><i></i><i></i><i></i><i></i><i></i></span></div>
+            <div class="core-card" data-module-card tabindex="0" role="button" aria-label="Cycle Odoo module preview">
+              <div class="core-top"><span class="status-pulse"></span><span class="module-name">ODOO / CORE</span><span class="core-arrow">↗</span></div>
+              <div class="core-code"><span>01</span><span class="module-value">crm.pipeline</span><b>+</b></div>
+              <div class="core-code faded"><span>02</span><span class="module-value">sale.order</span><b>+</b></div>
+              <div class="core-code faded-more"><span>03</span><span class="module-value">stock.move</span><b>+</b></div>
+              <div class="core-foot"><span class="module-status">6 active modules</span><span class="mini-bars"><i></i><i></i><i></i><i></i><i></i></span></div>
+              <span class="module-hint mono">CLICK TO CYCLE</span>
             </div>
             <div class="float-tag tag-one"><span>↳</span> AUTOMATE</div>
             <div class="float-tag tag-two">MIGRATE <span>↗</span></div>
