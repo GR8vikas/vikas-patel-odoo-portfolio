@@ -136,3 +136,64 @@ contactForm?.addEventListener('submit', async (event) => {
     }
   }
 });
+
+const moduleOrbit = document.querySelector('[data-module-orbit]');
+const orbitModules = moduleOrbit ? [...moduleOrbit.querySelectorAll('[data-lab-module]')] : [];
+const labDetail = document.querySelector('[data-lab-detail]');
+const labStatus = document.querySelector('[data-lab-status]');
+const labCopy = {
+  crm: { label: 'CRM', detail: 'Leads, activities, and customer context moving together so the next action is always visible.' },
+  inventory: { label: 'INVENTORY', detail: 'Products, moves, and replenishment rules connected into one reliable stock story.' },
+  api: { label: 'API', detail: 'Third-party services bridged into Odoo with predictable sync, clear ownership, and useful errors.' },
+  automation: { label: 'AUTOMATE', detail: 'Small rules that remove repetitive work while keeping the team in control of the workflow.' },
+};
+let activeOrbitModule = 'crm';
+let orbitTimer;
+
+const activateOrbitModule = (key, pauseAutoRotate = true) => {
+  const copy = labCopy[key];
+  if (!copy || !moduleOrbit) return;
+  activeOrbitModule = key;
+  orbitModules.forEach((module) => {
+    const isActive = module.dataset.labModule === key;
+    module.classList.toggle('active', isActive);
+    module.setAttribute('aria-pressed', String(isActive));
+  });
+  moduleOrbit.dataset.activeModule = key;
+  if (labDetail) labDetail.textContent = copy.detail;
+  if (labStatus) labStatus.textContent = `ACTIVE / ${copy.label}`;
+  if (pauseAutoRotate && orbitTimer) {
+    window.clearInterval(orbitTimer);
+    orbitTimer = undefined;
+  }
+};
+
+orbitModules.forEach((module) => {
+  module.setAttribute('aria-pressed', String(module.classList.contains('active')));
+  module.addEventListener('click', () => activateOrbitModule(module.dataset.labModule));
+  module.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      activateOrbitModule(module.dataset.labModule);
+    }
+  });
+});
+
+if (moduleOrbit && !prefersReducedMotion) {
+  let orbitIndex = 0;
+  orbitTimer = window.setInterval(() => {
+    orbitIndex = (orbitIndex + 1) % orbitModules.length;
+    activateOrbitModule(orbitModules[orbitIndex].dataset.labModule, false);
+  }, 4200);
+  moduleOrbit.addEventListener('pointermove', (event) => {
+    const rect = moduleOrbit.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    moduleOrbit.style.setProperty('--lab-rotate-x', `${(y * -10).toFixed(2)}deg`);
+    moduleOrbit.style.setProperty('--lab-rotate-y', `${(x * 12).toFixed(2)}deg`);
+  });
+  moduleOrbit.addEventListener('pointerleave', () => {
+    moduleOrbit.style.setProperty('--lab-rotate-x', '0deg');
+    moduleOrbit.style.setProperty('--lab-rotate-y', '0deg');
+  });
+}
