@@ -1,1 +1,1 @@
-{"routes":[{"path":"/","title":"Odoo Developer Portfolio"}]}
+{"routes":[{"path":"/","title":"Odoo Developer Portfolio"},{"path":"/projects/erp-workflow.html","title":"ERP Workflow Automation"},{"path":"/projects/api-integration.html","title":"API Integration Module"},{"path":"/projects/inventory-management.html","title":"Inventory & Product Management"}]}
